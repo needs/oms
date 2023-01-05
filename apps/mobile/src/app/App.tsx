@@ -426,6 +426,7 @@ const styles = StyleSheet.create({
       width: 1,
       height: 4,
     },
+    elevation: 3,
     shadowRadius: 12,
     padding: 24,
     marginBottom: 24,
