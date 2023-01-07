@@ -152,7 +152,7 @@ const TimelineScreen = ({
   navigation,
 }: NativeStackScreenProps<DrawerNavigatorParamList, 'Timeline'>) => {
   return (
-    <VStack alignItems="center" flexGrow="1" safeAreaBottom>
+    <VStack flexGrow="1" safeAreaBottom>
       <RoomSelector w="100%" bg="white" margin={4} />
       <Box w="100%" flexGrow={1}>
         <Agenda
@@ -164,9 +164,11 @@ const TimelineScreen = ({
         />
       </Box>
 
-      <Button w="100%" onPress={() => navigation.navigate('CreateRequest')}>
-        Demander un créneau
-      </Button>
+      <Box p="4">
+        <Button onPress={() => navigation.navigate('CreateRequest')}>
+          Demander un créneau
+        </Button>
+      </Box>
     </VStack>
   );
 };
