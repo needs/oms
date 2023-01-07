@@ -13,6 +13,8 @@ import {
   Button,
   FormControl,
   TextArea,
+  Avatar,
+  Spacer,
 } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -23,6 +25,50 @@ import DateTimePicker, {
   DateTimePickerAndroid,
 } from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
+import { LocaleConfig } from 'react-native-calendars';
+
+LocaleConfig.locales['fr'] = {
+  monthNames: [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
+  ],
+  monthNamesShort: [
+    'Janv.',
+    'Févr.',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juil.',
+    'Août',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Déc.',
+  ],
+  dayNames: [
+    'Dimanche',
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
+  ],
+  dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+  today: "Aujourd'hui",
+};
+LocaleConfig.defaultLocale = 'fr';
 
 const AppBar = ({ title }: { title: string }) => {
   return (
@@ -123,6 +169,7 @@ const CreateRequestScreen = () => {
             <TextArea
               placeholder="Type d'évevement, raisons particulières, ..."
               autoCompleteType=""
+              bg="white"
             />
           </VStack>
         </VStack>
@@ -159,7 +206,31 @@ const TimelineScreen = ({
           items={{
             '2023-01-08': [
               { name: 'item 1 - any js object', height: 1, day: '2023-01-08' },
+              { name: 'item 1 - any js object', height: 2, day: '2023-01-08' },
             ],
+          }}
+          firstDay={1}
+          renderItem={(item, firstItemInDay) => {
+            return (
+              <HStack
+                bg="white"
+                py="2"
+                px="4"
+                space="4"
+                rounded="lg"
+                marginTop={firstItemInDay ? 2 : 0}
+                marginRight={2}
+              >
+                <Avatar source={{ uri: 'https://picsum.photos/200' }} />
+                <VStack flexGrow="1">
+                  <HStack flexGrow="1">
+                    <Text flexGrow="1">BCA</Text>
+                    <Text color="green.300">Approuvé</Text>
+                  </HStack>
+                  <Text color="coolGray.500">18h - 20h</Text>
+                </VStack>
+              </HStack>
+            );
           }}
         />
       </Box>
