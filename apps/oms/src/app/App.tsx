@@ -46,30 +46,6 @@ const AppBar = ({ title }: { title: string }) => {
   );
 };
 
-type TimelineStackParamList = {
-  TimelineHome: undefined;
-  TimelineDetail: undefined;
-};
-
-const Stack = createNativeStackNavigator<TimelineStackParamList>();
-
-const TimelineNavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="TimelineHome"
-        component={TimelineScreen}
-        options={{ title: 'Échéancier', headerShown: false }}
-      />
-      <Stack.Screen
-        name="CreateRequest"
-        component={CreateRequestScreen}
-        options={{ title: 'Demander un créneau', presentation: 'modal' }}
-      />
-    </Stack.Navigator>
-  );
-};
-
 const CrossPlatformDateTimePicker = (
   props: ComponentProps<typeof DateTimePicker>
 ) => {
@@ -152,7 +128,7 @@ const CreateRequestScreen = () => {
         </VStack>
       </FormControl>
 
-      <Box px="4">
+      <Box p="4">
         <Button>Envoyer la demande</Button>
       </Box>
     </VStack>
@@ -174,9 +150,9 @@ const RoomSelector = (props: ComponentProps<typeof Select>) => {
 
 const TimelineScreen = ({
   navigation,
-}: NativeStackScreenProps<TimelineStackParamList, 'TimelineHome'>) => {
+}: NativeStackScreenProps<DrawerNavigatorParamList, 'Timeline'>) => {
   return (
-    <VStack alignItems="center" minHeight="100%" safeAreaBottom>
+    <VStack alignItems="center" flexGrow="1" safeAreaBottom>
       <RoomSelector w="100%" bg="white" margin={4} />
       <Box w="100%" flexGrow={1}>
         <Agenda
@@ -235,44 +211,77 @@ const ProfilScreen = () => {
   );
 };
 
-const Drawer = createDrawerNavigator();
+type DrawerNavigatorParamList = {
+  Timeline: undefined;
+  Requests: undefined;
+  Club: undefined;
+  Halls: undefined;
+  Settings: undefined;
+  Profil: undefined;
+};
+
+const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
+
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator initialRouteName="Timeline">
+      <Drawer.Screen
+        name="Timeline"
+        component={TimelineScreen}
+        options={{ title: 'Échéancier' }}
+      />
+      <Drawer.Screen
+        name="Requests"
+        component={RequestsScreen}
+        options={{ title: 'Demandes' }}
+      />
+      <Drawer.Screen
+        name="Club"
+        component={ClubScreen}
+        options={{ title: 'Club' }}
+      />
+      <Drawer.Screen
+        name="Halls"
+        component={HallsScreen}
+        options={{ title: 'Salles' }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ title: 'Paramètres' }}
+      />
+      <Drawer.Screen
+        name="Profil"
+        component={ProfilScreen}
+        options={{ title: 'Profil' }}
+      />
+    </Drawer.Navigator>
+  );
+};
+
+type StackNavigatorParamList = {
+  DrawerNavigator: undefined;
+  TimelineDetail: undefined;
+};
+
+const Stack = createNativeStackNavigator<StackNavigatorParamList>();
 
 export const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Drawer.Navigator initialRouteName="Timeline">
-          <Drawer.Screen
-            name="Timeline"
-            component={TimelineNavigator}
-            options={{ title: 'Échéancier' }}
+        <Stack.Navigator>
+          <Stack.Screen
+            name="DrawerNavigator"
+            component={DrawerNavigator}
+            options={{ headerShown: false }}
           />
-          <Drawer.Screen
-            name="Requests"
-            component={RequestsScreen}
-            options={{ title: 'Demandes' }}
+          <Stack.Screen
+            name="CreateRequest"
+            component={CreateRequestScreen}
+            options={{ title: 'Demander un créneau', presentation: 'modal' }}
           />
-          <Drawer.Screen
-            name="Club"
-            component={ClubScreen}
-            options={{ title: 'Club' }}
-          />
-          <Drawer.Screen
-            name="Halls"
-            component={HallsScreen}
-            options={{ title: 'Salles' }}
-          />
-          <Drawer.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{ title: 'Paramètres' }}
-          />
-          <Drawer.Screen
-            name="Profil"
-            component={ProfilScreen}
-            options={{ title: 'Profil' }}
-          />
-        </Drawer.Navigator>
+        </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
   );
