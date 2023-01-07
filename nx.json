@@ -54,5 +54,8 @@
     "sharedGlobals": [
       "{workspaceRoot}/babel.config.json"
     ]
+  },
+  "cli": {
+    "packageManager": "yarn"
   }
 }
