@@ -14,10 +14,10 @@ import {
   FormControl,
   TextArea,
   Avatar,
-  Spacer,
+  Switch,
+  Input,
 } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Agenda } from 'react-native-calendars';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -26,6 +26,12 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
 import { LocaleConfig } from 'react-native-calendars';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -126,6 +132,10 @@ const CreateRequestScreen = () => {
         <VStack space={4}>
           <RoomSelector w="100%" bg="white" />
           <VStack>
+            <FormControl.Label>Objet de la demande</FormControl.Label>
+            <Input bg="white" />
+          </VStack>
+          <VStack>
             <FormControl.Label>Jour</FormControl.Label>
             <CrossPlatformDateTimePicker
               value={date}
@@ -165,13 +175,15 @@ const CreateRequestScreen = () => {
             />
           </VStack>
           <VStack>
-            <FormControl.Label>Notes</FormControl.Label>
-            <TextArea
-              placeholder="Type d'évevement, raisons particulières, ..."
-              autoCompleteType=""
-              bg="white"
-            />
+            <FormControl.Label>Nombre de personnes</FormControl.Label>
+            <Input defaultValue="100" bg="white" />
           </VStack>
+          <HStack>
+            <FormControl.Label flexGrow="1">
+              Susceptible d'annulation
+            </FormControl.Label>
+            <Switch />
+          </HStack>
         </VStack>
       </FormControl>
 
@@ -197,7 +209,7 @@ const RoomSelector = (props: ComponentProps<typeof Select>) => {
 
 const TimelineScreen = ({
   navigation,
-}: NativeStackScreenProps<DrawerNavigatorParamList, 'Timeline'>) => {
+}: NativeStackScreenProps<TopTabNavigatorParamList, 'Timeline'>) => {
   return (
     <VStack flexGrow="1" safeAreaBottom>
       <RoomSelector w="100%" bg="white" margin={4} />
@@ -244,35 +256,56 @@ const TimelineScreen = ({
   );
 };
 
-const RequestsScreen = () => {
-  return (
-    <View>
-      <AppBar title="Demande" />
-    </View>
-  );
-};
+const RequestsScreen = ({
+  navigation,
+}: NativeStackScreenProps<TopTabNavigatorParamList, 'Requests'>) => {
+  // A list of all request with club logo, name, hours, room as well as the request statu (approved, pending, refused)
+  const requests = [
+    {
+      club: 'BCA',
+      logo: 'https://picsum.photos/200',
+      startDate: new Date(),
+      endDate: new Date(),
+      room: 'Grolier - Gymnase',
+      status: 'approved',
+    },
+    {
+      club: 'ABC69',
+      logo: 'https://picsum.photos/200',
+      startDate: new Date(),
+      endDate: new Date(),
+      room: 'Gymnase',
+      status: 'pending',
+    },
+  ];
 
-const ClubScreen = () => {
   return (
-    <View>
-      <AppBar title="Club" />
-    </View>
-  );
-};
-
-const HallsScreen = () => {
-  return (
-    <View>
-      <AppBar title="Salles" />
-    </View>
-  );
-};
-
-const SettingsScreen = () => {
-  return (
-    <View>
-      <AppBar title="Paramètres" />
-    </View>
+    <VStack flexGrow="1" safeAreaBottom>
+      <VStack space="2" p="2" flexGrow="1">
+        {requests.map((request, index) => (
+          <HStack key={index} bg="white" py="2" px="4" space="4" rounded="lg">
+            <Avatar source={{ uri: request.logo }} />
+            <VStack flexGrow="1">
+              <HStack flexGrow="1">
+                <Text flexGrow="1">{request.club}</Text>
+                <Text color="green.300">Approuvé</Text>
+              </HStack>
+              <HStack flexGrow="1">
+                <Text color="coolGray.500" flexGrow="1">
+                  Grolier - Gymnase
+                </Text>
+                <Text color="coolGray.500">18h - 20h</Text>
+              </HStack>
+            </VStack>
+          </HStack>
+        ))}
+      </VStack>
+      <Box p="4">
+        <Button onPress={() => navigation.navigate('CreateRequest')}>
+          Demander un créneau
+        </Button>
+      </Box>
+    </VStack>
   );
 };
 
@@ -284,7 +317,7 @@ const ProfilScreen = () => {
   );
 };
 
-type DrawerNavigatorParamList = {
+type TopTabNavigatorParamList = {
   Timeline: undefined;
   Requests: undefined;
   Club: undefined;
@@ -293,47 +326,37 @@ type DrawerNavigatorParamList = {
   Profil: undefined;
 };
 
-const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
+const TopTab = createMaterialTopTabNavigator<TopTabNavigatorParamList>();
 
-const DrawerNavigator = () => {
+const TopTabNavigator = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <Drawer.Navigator initialRouteName="Timeline">
-      <Drawer.Screen
+    <TopTab.Navigator
+      initialRouteName="Timeline"
+      screenOptions={{ tabBarStyle: { paddingTop: insets.top } }}
+    >
+      <TopTab.Screen
         name="Timeline"
         component={TimelineScreen}
-        options={{ title: 'Échéancier' }}
+        options={{ title: 'Agenda' }}
       />
-      <Drawer.Screen
+      <TopTab.Screen
         name="Requests"
         component={RequestsScreen}
         options={{ title: 'Demandes' }}
       />
-      <Drawer.Screen
-        name="Club"
-        component={ClubScreen}
-        options={{ title: 'Club' }}
-      />
-      <Drawer.Screen
-        name="Halls"
-        component={HallsScreen}
-        options={{ title: 'Salles' }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{ title: 'Paramètres' }}
-      />
-      <Drawer.Screen
+      <TopTab.Screen
         name="Profil"
         component={ProfilScreen}
         options={{ title: 'Profil' }}
       />
-    </Drawer.Navigator>
+    </TopTab.Navigator>
   );
 };
 
 type StackNavigatorParamList = {
-  DrawerNavigator: undefined;
+  TopTabNavigator: undefined;
   TimelineDetail: undefined;
 };
 
@@ -341,22 +364,24 @@ const Stack = createNativeStackNavigator<StackNavigatorParamList>();
 
 export const App = () => {
   return (
-    <NativeBaseProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="DrawerNavigator"
-            component={DrawerNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CreateRequest"
-            component={CreateRequestScreen}
-            options={{ title: 'Demander un créneau', presentation: 'modal' }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </NativeBaseProvider>
+    <SafeAreaProvider>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="TopTabNavigator"
+              component={TopTabNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CreateRequest"
+              component={CreateRequestScreen}
+              options={{ title: 'Demander un créneau', presentation: 'modal' }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </SafeAreaProvider>
   );
 };
 
