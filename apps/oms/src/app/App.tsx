@@ -12,10 +12,10 @@ import {
   Box,
   Button,
   FormControl,
-  TextArea,
   Avatar,
   Switch,
   Input,
+  Pressable,
 } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -29,7 +29,6 @@ import { LocaleConfig } from 'react-native-calendars';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {
   SafeAreaProvider,
-  SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
@@ -194,6 +193,60 @@ const CreateRequestScreen = () => {
   );
 };
 
+const ShowRequestScreen = () => {
+  const date = new Date();
+  const startTime = new Date();
+  const endTime = new Date();
+
+  return (
+    <VStack safeAreaBottom minHeight="100%">
+      <FormControl padding={4} flexGrow="1">
+        <VStack space={4}>
+          <VStack>
+            <FormControl.Label>Salle</FormControl.Label>
+            <Text>Grolier - Gymnase</Text>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Objet de la demande</FormControl.Label>
+            <Text>Interclub D2</Text>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Jour</FormControl.Label>
+            <Text>{date.toLocaleDateString()}</Text>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Heure de début</FormControl.Label>
+            <Text>{startTime.toLocaleTimeString()}</Text>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Heure de fin</FormControl.Label>
+            <Text>{endTime.toLocaleTimeString()}</Text>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Nombre de personnes</FormControl.Label>
+            <Text>100</Text>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Susceptible d'annulation</FormControl.Label>
+            <Text>Non</Text>
+          </VStack>
+        </VStack>
+      </FormControl>
+
+      <Box p="4">
+        <HStack space={2}>
+          <Button flexGrow="1" colorScheme="green">
+            Aprouver
+          </Button>
+          <Button flexGrow="1" colorScheme="red">
+            Refuser
+          </Button>
+        </HStack>
+      </Box>
+    </VStack>
+  );
+};
+
 const RoomSelector = (props: ComponentProps<typeof Select>) => {
   return (
     <Select placeholder="Salle" {...props}>
@@ -283,21 +336,26 @@ const RequestsScreen = ({
     <VStack flexGrow="1" safeAreaBottom>
       <VStack space="2" p="2" flexGrow="1">
         {requests.map((request, index) => (
-          <HStack key={index} bg="white" py="2" px="4" space="4" rounded="lg">
-            <Avatar source={{ uri: request.logo }} />
-            <VStack flexGrow="1">
-              <HStack flexGrow="1">
-                <Text flexGrow="1">{request.club}</Text>
-                <Text color="green.300">Approuvé</Text>
-              </HStack>
-              <HStack flexGrow="1">
-                <Text color="coolGray.500" flexGrow="1">
-                  Grolier - Gymnase
-                </Text>
-                <Text color="coolGray.500">18h - 20h</Text>
-              </HStack>
-            </VStack>
-          </HStack>
+          <Pressable
+            key={index}
+            onPress={() => navigation.navigate('ShowRequest')}
+          >
+            <HStack bg="white" py="2" px="4" space="4" rounded="lg">
+              <Avatar source={{ uri: request.logo }} />
+              <VStack flexGrow="1">
+                <HStack flexGrow="1">
+                  <Text flexGrow="1">{request.club}</Text>
+                  <Text color="green.300">Approuvé</Text>
+                </HStack>
+                <HStack flexGrow="1">
+                  <Text color="coolGray.500" flexGrow="1">
+                    Grolier - Gymnase
+                  </Text>
+                  <Text color="coolGray.500">18h - 20h</Text>
+                </HStack>
+              </VStack>
+            </HStack>
+          </Pressable>
         ))}
       </VStack>
       <Box p="4">
@@ -377,6 +435,11 @@ export const App = () => {
               name="CreateRequest"
               component={CreateRequestScreen}
               options={{ title: 'Demander un créneau', presentation: 'modal' }}
+            />
+            <Stack.Screen
+              name="ShowRequest"
+              component={ShowRequestScreen}
+              options={{ title: 'Demande de créneau', presentation: 'modal' }}
             />
           </Stack.Navigator>
         </NavigationContainer>
