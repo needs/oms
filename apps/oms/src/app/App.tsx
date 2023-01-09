@@ -277,24 +277,19 @@ const TimelineScreen = ({
           firstDay={1}
           renderItem={(item, firstItemInDay) => {
             return (
-              <HStack
-                bg="white"
-                py="2"
-                px="4"
-                space="4"
-                rounded="lg"
-                marginTop={firstItemInDay ? 2 : 0}
-                marginRight={2}
-              >
-                <Avatar source={{ uri: 'https://picsum.photos/200' }} />
-                <VStack flexGrow="1">
-                  <HStack flexGrow="1">
-                    <Text flexGrow="1">BCA</Text>
-                    <Text color="green.300">Approuvé</Text>
-                  </HStack>
-                  <Text color="coolGray.500">18h - 20h</Text>
-                </VStack>
-              </HStack>
+              <Box marginTop={firstItemInDay ? 2 : 0}>
+                <Request
+                  request={{
+                    club: 'BCA',
+                    logo: 'https://picsum.photos/200',
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    room: 'Grolier - Gymnase',
+                    status: 'approved',
+                  }}
+                  onPress={() => navigation.navigate('ShowRequest')}
+                />
+              </Box>
             );
           }}
         />
@@ -309,11 +304,60 @@ const TimelineScreen = ({
   );
 };
 
+interface Request {
+  club: string;
+  logo: string;
+  startDate: Date;
+  endDate: Date;
+  room: string;
+  status: 'approved' | 'pending' | 'refused';
+}
+
+const Request = ({
+  request,
+  onPress,
+}: {
+  request: Request;
+  onPress: () => void;
+}) => {
+  const statusColor = {
+    approved: 'green.300',
+    pending: 'yellow.300',
+    refused: 'red.300',
+  }[request.status];
+
+  const statusText = {
+    approved: 'Approuvé',
+    pending: 'En attente',
+    refused: 'Refusé',
+  }[request.status];
+
+  return (
+    <Pressable onPress={onPress}>
+      <HStack bg="white" py="2" px="4" space="4" rounded="lg">
+        <Avatar source={{ uri: request.logo }} />
+        <VStack flexGrow="1">
+          <HStack flexGrow="1">
+            <Text flexGrow="1">{request.club}</Text>
+            <Text color={statusColor}>{statusText}</Text>
+          </HStack>
+          <HStack flexGrow="1">
+            <Text color="coolGray.500" flexGrow="1">
+              {request.room}
+            </Text>
+            <Text color="coolGray.500">18h - 20h</Text>
+          </HStack>
+        </VStack>
+      </HStack>
+    </Pressable>
+  );
+};
+
 const RequestsScreen = ({
   navigation,
 }: NativeStackScreenProps<TopTabNavigatorParamList, 'Requests'>) => {
   // A list of all request with club logo, name, hours, room as well as the request statu (approved, pending, refused)
-  const requests = [
+  const requests: Request[] = [
     {
       club: 'BCA',
       logo: 'https://picsum.photos/200',
@@ -336,26 +380,11 @@ const RequestsScreen = ({
     <VStack flexGrow="1" safeAreaBottom>
       <VStack space="2" p="2" flexGrow="1">
         {requests.map((request, index) => (
-          <Pressable
+          <Request
+            request={request}
             key={index}
             onPress={() => navigation.navigate('ShowRequest')}
-          >
-            <HStack bg="white" py="2" px="4" space="4" rounded="lg">
-              <Avatar source={{ uri: request.logo }} />
-              <VStack flexGrow="1">
-                <HStack flexGrow="1">
-                  <Text flexGrow="1">{request.club}</Text>
-                  <Text color="green.300">Approuvé</Text>
-                </HStack>
-                <HStack flexGrow="1">
-                  <Text color="coolGray.500" flexGrow="1">
-                    Grolier - Gymnase
-                  </Text>
-                  <Text color="coolGray.500">18h - 20h</Text>
-                </HStack>
-              </VStack>
-            </HStack>
-          </Pressable>
+          />
         ))}
       </VStack>
       <Box p="4">
