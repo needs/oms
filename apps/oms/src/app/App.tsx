@@ -399,7 +399,22 @@ const RequestsScreen = ({
 const ProfilScreen = () => {
   return (
     <View>
-      <AppBar title="Profil" />
+      <FormControl padding={4} flexGrow="1">
+        <VStack space={4}>
+          <VStack>
+            <FormControl.Label>Prénom</FormControl.Label>
+            <Input bg="white" value="Timothée"/>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Nom</FormControl.Label>
+            <Input bg="white" value="Vialatoux"/>
+          </VStack>
+          <VStack>
+            <FormControl.Label>Email</FormControl.Label>
+            <Input bg="white" value="timothee.vialatoux@gmail.com"/>
+          </VStack>
+        </VStack>
+      </FormControl>
     </View>
   );
 };
