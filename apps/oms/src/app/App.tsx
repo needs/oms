@@ -1,9 +1,7 @@
 import { ComponentProps, useState } from 'react';
 
 import {
-  HamburgerIcon,
   HStack,
-  IconButton,
   NativeBaseProvider,
   Text,
   View,
@@ -16,6 +14,10 @@ import {
   Switch,
   Input,
   Pressable,
+  ScrollView,
+  Divider,
+  Image,
+  ChevronRightIcon,
 } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,13 +26,61 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import DateTimePicker, {
   DateTimePickerAndroid,
 } from '@react-native-community/datetimepicker';
-import { Platform } from 'react-native';
 import { LocaleConfig } from 'react-native-calendars';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+
+interface Room {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  capacity: number;
+}
+
+interface Building {
+  id: number;
+  name: string;
+  address: string;
+  rooms: Room[];
+}
+
+const Building = ({ building }: { building: Building }) => {
+  return (
+    <VStack
+      rounded="lg"
+      overflow="hidden"
+      borderColor="coolGray.200"
+      borderWidth="1"
+      backgroundColor="gray.50"
+      divider={<Divider />}
+    >
+      <HStack padding={4}>
+        <Text fontWeight="bold" flexGrow="1">
+          {building.name}
+        </Text>
+        <Text color="coolGray.400">{building.address}</Text>
+      </HStack>
+      <VStack divider={<Divider />}>
+        {building.rooms.map((room) => (
+          <HStack space={4} key={room.id} alignItems="center">
+            <Image source={{ uri: room.image }} alt="Room" size="sm" />
+            <VStack justifyContent="center" flexGrow="1">
+              <Text>{room.name}</Text>
+              <Text color="coolGray.400">Capacity: {room.capacity}</Text>
+            </VStack>
+            <Box padding={4}>
+              <ChevronRightIcon />
+            </Box>
+          </HStack>
+        ))}
+      </VStack>
+    </VStack>
+  );
+};
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -74,28 +124,6 @@ LocaleConfig.locales['fr'] = {
   today: "Aujourd'hui",
 };
 LocaleConfig.defaultLocale = 'fr';
-
-const AppBar = ({ title }: { title: string }) => {
-  return (
-    <HStack
-      bg="violet.800"
-      px="1"
-      py="3"
-      justifyContent="space-between"
-      alignItems="center"
-      w="100%"
-    >
-      <HStack alignItems="center">
-        <IconButton
-          icon={<HamburgerIcon size="sm" name="menu" color="white" />}
-        />
-        <Text color="white" fontSize="20" fontWeight="bold">
-          {title}
-        </Text>
-      </HStack>
-    </HStack>
-  );
-};
 
 const CrossPlatformDateTimePicker = (
   props: ComponentProps<typeof DateTimePicker>
@@ -244,6 +272,70 @@ const ShowRequestScreen = () => {
         </HStack>
       </Box>
     </VStack>
+  );
+};
+
+const RoomsScreen = () => {
+  const buildings = [
+    {
+      id: 1,
+      name: 'Grolier',
+      address: "Rue de la Paix, 69210 L'Arbresle",
+      rooms: [
+        {
+          id: 1,
+          name: 'Gymnase',
+          description: 'Salle multi-sport',
+          image: 'https://picsum.photos/200',
+          capacity: 100,
+        },
+        {
+          id: 2,
+          name: 'Dojo',
+          description: 'Art-martiaux',
+          image: 'https://picsum.photos/201',
+          capacity: 20,
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: 'Grand-champs',
+      address: 'Rue de la Paix, 69210 Sain-bel',
+      rooms: [
+        {
+          id: 3,
+          name: "Salle d'escalade",
+          description: 'Escalade uniquement',
+          image: 'https://picsum.photos/202',
+          capacity: 20,
+        },
+        {
+          id: 4,
+          name: "Salle de réunion",
+          description: '10 tables, 20 chaises',
+          image: 'https://picsum.photos/203',
+          capacity: 20,
+        },
+        {
+          id: 5,
+          name: "Gymnase multi-sports",
+          description: 'Hauteur de plafond: 13m',
+          image: 'https://picsum.photos/204',
+          capacity: 100,
+        },
+      ],
+    },
+  ];
+
+  return (
+    <ScrollView>
+      <VStack safeAreaBottom minHeight="100%" padding={4} space={4}>
+        {buildings.map((building) => (
+          <Building building={building} key={building.id} />
+        ))}
+      </VStack>
+    </ScrollView>
   );
 };
 
@@ -396,25 +488,36 @@ const RequestsScreen = ({
   );
 };
 
-const ProfilScreen = () => {
+const ProfilScreen = ({
+  navigation,
+}: NativeStackScreenProps<TopTabNavigatorParamList, 'Profil'>) => {
   return (
     <View>
       <FormControl padding={4} flexGrow="1">
         <VStack space={4}>
           <VStack>
             <FormControl.Label>Prénom</FormControl.Label>
-            <Input bg="white" value="Timothée"/>
+            <Input bg="white" value="Timothée" />
           </VStack>
           <VStack>
             <FormControl.Label>Nom</FormControl.Label>
-            <Input bg="white" value="Vialatoux"/>
+            <Input bg="white" value="Vialatoux" />
           </VStack>
           <VStack>
             <FormControl.Label>Email</FormControl.Label>
-            <Input bg="white" value="timothee.vialatoux@gmail.com"/>
+            <Input bg="white" value="timothee.vialatoux@gmail.com" />
           </VStack>
         </VStack>
       </FormControl>
+      <Button
+        onPress={() => navigation.navigate('Rooms')}
+        variant="outline"
+        colorScheme="primary"
+        margin="4"
+        backgroundColor="white"
+      >
+        Salles
+      </Button>
     </View>
   );
 };
@@ -484,6 +587,11 @@ export const App = () => {
               name="ShowRequest"
               component={ShowRequestScreen}
               options={{ title: 'Demande de créneau', presentation: 'modal' }}
+            />
+            <Stack.Screen
+              name="Rooms"
+              component={RoomsScreen}
+              options={{ title: 'Salles' }}
             />
           </Stack.Navigator>
         </NavigationContainer>
