@@ -18,8 +18,20 @@ import {
   Divider,
   Image,
   ChevronRightIcon,
+  AspectRatio,
+  ArrowBackIcon,
+  Spacer,
+  Heading,
+  InfoIcon,
+  IconButton,
 } from 'native-base';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigatorScreenParams,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Agenda } from 'react-native-calendars';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -32,6 +44,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { ImageBackground, Platform } from 'react-native';
 
 interface Room {
   id: number;
@@ -49,13 +62,15 @@ interface Building {
 }
 
 const Building = ({ building }: { building: Building }) => {
+  const navigation = useNavigation();
+
   return (
     <VStack
       rounded="lg"
       overflow="hidden"
       borderColor="coolGray.200"
       borderWidth="1"
-      backgroundColor="gray.50"
+      backgroundColor="white"
       divider={<Divider />}
     >
       <HStack padding={4}>
@@ -66,16 +81,21 @@ const Building = ({ building }: { building: Building }) => {
       </HStack>
       <VStack divider={<Divider />}>
         {building.rooms.map((room) => (
-          <HStack space={4} key={room.id} alignItems="center">
-            <Image source={{ uri: room.image }} alt="Room" size="sm" />
-            <VStack justifyContent="center" flexGrow="1">
-              <Text>{room.name}</Text>
-              <Text color="coolGray.400">Capacity: {room.capacity}</Text>
-            </VStack>
-            <Box padding={4}>
-              <ChevronRightIcon />
-            </Box>
-          </HStack>
+          <Pressable
+            key={room.id}
+            onPress={() => navigation.navigate('Room', { room })}
+          >
+            <HStack space={4} alignItems="center">
+              <Image source={{ uri: room.image }} alt="Room" size="sm" />
+              <VStack justifyContent="center" flexGrow="1">
+                <Text>{room.name}</Text>
+                <Text color="coolGray.400">Capacity: {room.capacity}</Text>
+              </VStack>
+              <Box padding={4}>
+                <ChevronRightIcon />
+              </Box>
+            </HStack>
+          </Pressable>
         ))}
       </VStack>
     </VStack>
@@ -275,6 +295,93 @@ const ShowRequestScreen = () => {
   );
 };
 
+const RoomScreen = () => {
+  const route = useRoute<RouteProp<StackNavigatorParamList, 'Room'>>();
+  const { room } = route.params;
+
+  const navigation = useNavigation();
+
+  return (
+    <VStack minHeight="100%">
+      <AspectRatio ratio={16 / 9}>
+        <ImageBackground
+          source={{
+            uri: room.image,
+          }}
+          resizeMode="cover"
+        >
+          <VStack flexGrow="1">
+            <Spacer flexGrow="1" />
+            <HStack
+              space={4}
+              padding={4}
+              backgroundColor="rgba(255, 255, 255, 0.8)"
+              alignItems="center"
+            >
+              <IconButton onPress={() => navigation.goBack()} icon={<ArrowBackIcon color="black" size="md" />} />
+              <Heading>{room.name} - Grolier</Heading>
+            </HStack>
+          </VStack>
+        </ImageBackground>
+      </AspectRatio>
+      <VStack padding={4} space={4}>
+        <VStack
+          rounded="lg"
+          borderColor="coolGray.200"
+          borderWidth="1"
+          backgroundColor="white"
+          divider={<Divider />}
+        >
+          <HStack space={4} padding={4}>
+            <Text>{room.description}</Text>
+          </HStack>
+          <HStack space={4} padding={4}>
+            <Text fontWeight="bold" flexGrow="1">
+              Capacité
+            </Text>
+            <Text>{room.capacity}</Text>
+          </HStack>
+        </VStack>
+        <VStack
+          rounded="lg"
+          borderColor="coolGray.200"
+          borderWidth="1"
+          backgroundColor="white"
+          divider={<Divider />}
+        >
+          <HStack space={4} padding={4} alignItems="center">
+            <Text flexGrow="1" fontWeight="bold">
+              Clubs prioritaires
+            </Text>
+            <InfoIcon color="blue" />
+          </HStack>
+          <VStack divider={<Divider />}>
+            <HStack space={4} padding={4} justifyContent="center">
+              <Image
+                source={{
+                  uri: 'https://picsum.photos/200',
+                }}
+                size={12}
+                alt="BCA"
+                rounded="full"
+              />
+              <VStack flexGrow="1">
+                <HStack>
+                <Text fontWeight="bold" flexGrow="1">
+                  BCA
+                </Text>
+                <Text color="coolGray.500">Lentilly</Text>
+                </HStack>
+                <Text>Basket</Text>
+              </VStack>
+            </HStack>
+          </VStack>
+        </VStack>
+      </VStack>
+    </VStack>
+  );
+};
+
 const RoomsScreen = () => {
   const buildings = [
     {
@@ -312,14 +419,14 @@ const RoomsScreen = () => {
         },
         {
           id: 4,
-          name: "Salle de réunion",
+          name: 'Salle de réunion',
           description: '10 tables, 20 chaises',
           image: 'https://picsum.photos/203',
           capacity: 20,
         },
         {
           id: 5,
-          name: "Gymnase multi-sports",
+          name: 'Gymnase multi-sports',
           description: 'Hauteur de plafond: 13m',
           image: 'https://picsum.photos/204',
           capacity: 100,
@@ -561,9 +668,20 @@ const TopTabNavigator = () => {
 };
 
 type StackNavigatorParamList = {
-  TopTabNavigator: undefined;
-  TimelineDetail: undefined;
+  TopTabNavigator: NavigatorScreenParams<TopTabNavigatorParamList>;
+  CreateRequest: undefined;
+  ShowRequest: undefined;
+  Rooms: undefined;
+  Room: { room: Room };
 };
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface RootParamList extends StackNavigatorParamList {}
+  }
+}
 
 const Stack = createNativeStackNavigator<StackNavigatorParamList>();
 
@@ -592,6 +710,11 @@ export const App = () => {
               name="Rooms"
               component={RoomsScreen}
               options={{ title: 'Salles' }}
+            />
+            <Stack.Screen
+              name="Room"
+              component={RoomScreen}
+              options={{ title: 'Salle', headerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>
