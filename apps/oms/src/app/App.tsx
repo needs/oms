@@ -318,7 +318,10 @@ const RoomScreen = () => {
               backgroundColor="rgba(255, 255, 255, 0.8)"
               alignItems="center"
             >
-              <IconButton onPress={() => navigation.goBack()} icon={<ArrowBackIcon color="black" size="md" />} />
+              <IconButton
+                onPress={() => navigation.goBack()}
+                icon={<ArrowBackIcon color="black" size="md" />}
+              />
               <Heading>{room.name} - Grolier</Heading>
             </HStack>
           </VStack>
@@ -367,10 +370,10 @@ const RoomScreen = () => {
               />
               <VStack flexGrow="1">
                 <HStack>
-                <Text fontWeight="bold" flexGrow="1">
-                  BCA
-                </Text>
-                <Text color="coolGray.500">Lentilly</Text>
+                  <Text fontWeight="bold" flexGrow="1">
+                    BCA
+                  </Text>
+                  <Text color="coolGray.500">Lentilly</Text>
                 </HStack>
                 <Text>Basket</Text>
               </VStack>
@@ -599,8 +602,8 @@ const ProfilScreen = ({
   navigation,
 }: NativeStackScreenProps<TopTabNavigatorParamList, 'Profil'>) => {
   return (
-    <View>
-      <FormControl padding={4} flexGrow="1">
+    <VStack padding={4} space={4}>
+      <FormControl>
         <VStack space={4}>
           <VStack>
             <FormControl.Label>Prénom</FormControl.Label>
@@ -616,16 +619,28 @@ const ProfilScreen = ({
           </VStack>
         </VStack>
       </FormControl>
-      <Button
-        onPress={() => navigation.navigate('Rooms')}
-        variant="outline"
-        colorScheme="primary"
-        margin="4"
+      <VStack
+        rounded="lg"
+        overflow="hidden"
+        borderColor="coolGray.200"
+        borderWidth="1"
         backgroundColor="white"
+        divider={<Divider />}
       >
-        Salles
-      </Button>
-    </View>
+        <Pressable onPress={() => navigation.navigate('Rooms')}>
+          <HStack space={4} padding={4} alignItems="center">
+            <Text flexGrow="1">Salles</Text>
+            <ChevronRightIcon />
+          </HStack>
+        </Pressable>
+        <Pressable onPress={() => navigation.navigate('Rooms')}>
+          <HStack space={4} padding={4} alignItems="center">
+            <Text flexGrow="1">Groupes</Text>
+            <ChevronRightIcon />
+          </HStack>
+        </Pressable>
+      </VStack>
+    </VStack>
   );
 };
 
