@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "@expo/metro-config": "0.5.2",
+    "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "~0.17.3",
     "@react-native-community/datetimepicker": "^6.7.1",
     "@react-native-community/masked-view": "^0.1.11",

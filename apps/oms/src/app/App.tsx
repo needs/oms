@@ -45,6 +45,9 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { ImageBackground, Platform } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 interface Room {
   id: number;
@@ -629,12 +632,14 @@ const ProfilScreen = ({
       >
         <Pressable onPress={() => navigation.navigate('Rooms')}>
           <HStack space={4} padding={4} alignItems="center">
+            <FontAwesome5 name="building" size={18} color="black" />
             <Text flexGrow="1">Salles</Text>
             <ChevronRightIcon />
           </HStack>
         </Pressable>
         <Pressable onPress={() => navigation.navigate('Rooms')}>
           <HStack space={4} padding={4} alignItems="center">
+          <MaterialIcons name="groups" size={18} color="black" />
             <Text flexGrow="1">Groupes</Text>
             <ChevronRightIcon />
           </HStack>
