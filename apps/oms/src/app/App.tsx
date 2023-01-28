@@ -92,7 +92,7 @@ const Building = ({ building }: { building: Building }) => {
               <Image source={{ uri: room.image }} alt="Room" size="sm" />
               <VStack justifyContent="center" flexGrow="1">
                 <Text>{room.name}</Text>
-                <Text color="coolGray.400">Capacity: {room.capacity}</Text>
+                <Text color="coolGray.400">{room.capacity} personnes</Text>
               </VStack>
               <Box padding={4}>
                 <ChevronRightIcon />
