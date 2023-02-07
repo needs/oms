@@ -1,0 +1,103 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  building      Building             @relation(fields: [buildingId], references: [id])
+  buildingId    Int
+  bookings      Booking[]
+  organizations OrganizationToRoom[]
+}
+
+model Building {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rooms     Room[]
+}
+
+model Booking {
+  id             Int          @id @default(autoincrement())
+  title          String
+  start          DateTime
+  numberOfPeople Int
+  description    String?
+  end            DateTime
+  booked         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  room           Room         @relation(fields: [roomId], references: [id])
+  roomId         Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+  votes          Vote[]
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  approved  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+}
+
+model Organization {
+  id        Int                  @id @default(autoincrement())
+  fullName  String
+  shortName String
+  logo      String?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  members   OrganizationToUser[]
+  bookings  Booking[]
+  rooms     OrganizationToRoom[]
+  votes    Vote[]
+}
+
+model OrganizationToRoom {
+  organizationId Int
+  roomId         Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  room           Room         @relation(fields: [roomId], references: [id])
+
+  canBook Boolean @default(false)
+  canEdit Boolean @default(false)
+
+  @@id([organizationId, roomId])
+}
+
+model OrganizationToUser {
+  organizationId Int
+  userId         Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+
+  canBook Boolean @default(false)
+  canEdit Boolean @default(false)
+
+  @@id([organizationId, userId])
+}
+
+model User {
+  id            Int                  @id @default(autoincrement())
+  email         String               @unique
+  password      String
+  firstName     String
+  lastName      String
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  organizations OrganizationToUser[]
+}

@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@actions/exec@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@actions/exec/-/exec-1.1.1.tgz#2e43f28c54022537172819a7cf886c844221a611"
+  integrity sha512-+sCcHHbVdk93a0XT19ECtO/gIXoxvdsgQLzb2fE2/5sIZmWQuluYyjPQtrtTHdU1YzTZ7bAPN4sITq2xi1679w==
+  dependencies:
+    "@actions/io" "^1.0.1"
+
+"@actions/io@^1.0.1":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.1.2.tgz#766ac09674a289ce0f1550ffe0a6eac9261a8ea9"
+  integrity sha512-d+RwPlMp+2qmBfeLYPLXuSRykDIFEwdTA0MMxzS9kh4kvP1ftrc/9fzy6pX6qAjthdXruHQ6/6kjT/DNo5ALuw==
+
 "@adobe/css-tools@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.0.1.tgz#b38b444ad3aa5fedbb15f2f746dcd934226a12dd"
@@ -2674,6 +2686,22 @@
     yargs "^17.6.2"
     yargs-parser "21.1.1"
 
+"@nx-tools/core@4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@nx-tools/core/-/core-4.0.3.tgz#5082d2b04bcef6a9eb02ecfea0473605a2bbb03a"
+  integrity sha512-u5t5WxbokjzRKerXIJ3vCmSTb9w7ibua5LExoqN3EuL526ZDWw/FigMtVkmqNN/fGtXvBAmFV/R5skPqlv6gCQ==
+  dependencies:
+    "@actions/exec" "^1.1.1"
+    colorette "^2.0.19"
+
+"@nx-tools/nx-prisma@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@nx-tools/nx-prisma/-/nx-prisma-4.0.3.tgz#a04f24bb3b807c63e7e20f755ef8483ceec7d77e"
+  integrity sha512-uTCJ7UsBv1uzQi5l3xrur/haXdW/Y9eU6ffC1UkFKSvEDHpkLqXLe6R4RRgcGBfJMFv2ws0UhezwPc3anAP3Sg==
+  dependencies:
+    "@nx-tools/core" "4.0.3"
+    "@swc/helpers" "^0.4.12"
+
 "@oclif/core@1.23.2":
   version "1.23.2"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.23.2.tgz#6779f412d787ddc885b507cb00927dae71b641da"
@@ -2776,6 +2804,18 @@
   integrity sha512-jjMmK1tnZbm1Jq5a7fBliM4gQwjxMU7TFoRNwIyzwlO+eHPRCFv/Nv+H/Gi1jc3WR7QURG8D5d0Tn12YGrUqBQ==
   dependencies:
     esquery "^1.0.1"
+
+"@prisma/client@^4.5.0":
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.9.0.tgz#4a4068f3540732ea5723c008d49ed684d20f9340"
+  integrity sha512-bz6QARw54sWcbyR1lLnF2QHvRW5R/Jxnbbmwh3u+969vUKXtBkXgSgjDA85nji31ZBlf7+FrHDy5x+5ydGyQDg==
+  dependencies:
+    "@prisma/engines-version" "4.9.0-42.ceb5c99003b99c9ee2c1d2e618e359c14aef2ea5"
+
+"@prisma/engines-version@4.9.0-42.ceb5c99003b99c9ee2c1d2e618e359c14aef2ea5":
+  version "4.9.0-42.ceb5c99003b99c9ee2c1d2e618e359c14aef2ea5"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.9.0-42.ceb5c99003b99c9ee2c1d2e618e359c14aef2ea5.tgz#9d817a5779fc05b107eb02f63d197ad296d60b3c"
+  integrity sha512-M16aibbxi/FhW7z1sJCX8u+0DriyQYY5AyeTH7plQm9MLnURoiyn3CZBqAyIoQ+Z1pS77usCIibYJWSgleBMBA==
 
 "@prisma/engines@4.9.0":
   version "4.9.0"
@@ -4040,7 +4080,7 @@
     deepmerge "^4.2.2"
     svgo "^2.8.0"
 
-"@swc/helpers@^0.4.14":
+"@swc/helpers@^0.4.12", "@swc/helpers@^0.4.14":
   version "0.4.14"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.14.tgz#1352ac6d95e3617ccb7c1498ff019654f1e12a74"
   integrity sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==
@@ -6793,7 +6833,7 @@ colorette@^1.0.7, colorette@^1.1.0:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.4.0.tgz#5190fbb87276259a86ad700bff2c6d6faa3fca40"
   integrity sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==
 
-colorette@^2.0.10:
+colorette@^2.0.10, colorette@^2.0.19:
   version "2.0.19"
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.19.tgz#cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798"
   integrity sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==
