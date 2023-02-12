@@ -10,20 +10,27 @@ datasource db {
 model Room {
   id            Int                  @id @default(autoincrement())
   name          String
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+  capacity      Int
+  description   String?
+  pictures      String[]
   building      Building             @relation(fields: [buildingId], references: [id])
   buildingId    Int
   bookings      Booking[]
   organizations OrganizationToRoom[]
+
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
 }
 
 model Building {
   id        Int      @id @default(autoincrement())
   name      String
+  address   String
+  pictures  String[]
+  rooms     Room[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  rooms     Room[]
 }
 
 model Booking {
@@ -34,24 +41,26 @@ model Booking {
   description    String?
   end            DateTime
   booked         Boolean      @default(false)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
   room           Room         @relation(fields: [roomId], references: [id])
   roomId         Int
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId Int
   votes          Vote[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model Vote {
   id        Int      @id @default(autoincrement())
   approved  Boolean
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   booking   Booking  @relation(fields: [bookingId], references: [id])
   bookingId Int
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Organization {
@@ -59,12 +68,13 @@ model Organization {
   fullName  String
   shortName String
   logo      String?
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
   members   OrganizationToUser[]
   bookings  Booking[]
   rooms     OrganizationToRoom[]
   votes    Vote[]
+
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
 }
 
 model OrganizationToRoom {
@@ -97,7 +107,8 @@ model User {
   password      String
   firstName     String
   lastName      String
+  organizations OrganizationToUser[]
+
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
-  organizations OrganizationToUser[]
 }
