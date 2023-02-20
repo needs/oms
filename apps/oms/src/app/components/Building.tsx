@@ -1,22 +1,9 @@
+import { buildingSchema } from "@oms-monorepo/shared";
 import { useNavigation } from "@react-navigation/native";
 import { Box, ChevronRightIcon, Divider, HStack, Image, Pressable, Text, VStack } from "native-base";
+import { z } from "zod";
 
-export interface Room {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  capacity: number;
-}
-
-export interface Building {
-  id: number;
-  name: string;
-  address: string;
-  rooms: Room[];
-}
-
-const Building = ({ building }: { building: Building }) => {
+const Building = ({ building }: { building: z.infer<typeof buildingSchema> }) => {
   const navigation = useNavigation();
 
   return (
@@ -38,7 +25,7 @@ const Building = ({ building }: { building: Building }) => {
         {building.rooms.map((room) => (
           <Pressable
             key={room.id}
-            onPress={() => navigation.navigate('Room', { room })}
+            onPress={() => navigation.navigate('RoomAgenda', { room })}
           >
             <HStack space={4} alignItems="center">
               <Image source={{ uri: room.image }} alt="Room" size="sm" />

@@ -1,3 +1,4 @@
+import { roomSchema } from '@oms-monorepo/shared';
 import {
   ArrowBackIcon,
   AspectRatio,
@@ -8,9 +9,9 @@ import {
   VStack,
 } from 'native-base';
 import { ImageBackground } from 'react-native';
-import { Room } from './Building';
+import z from "zod";
 
-const RoomHeader = ({ room, onBack }: { room: Room; onBack: () => void }) => {
+const RoomHeader = ({ room, onBack }: { room: z.infer<typeof roomSchema>; onBack: () => void }) => {
   return (
     <AspectRatio ratio={16 / 9}>
       <ImageBackground

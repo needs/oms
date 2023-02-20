@@ -1,20 +1,21 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Room } from '../components/Building';
 import CreateRequestScreen from './CreateRequest';
 import RoomAgendaScreen from './RoomAgenda';
 import RoomInfoScreen from './RoomInfo';
 import RoomsScreen from './Rooms';
 import ShowRequestScreen from './ShowRequest';
 import TopTabNavigator, { TopTabNavigatorParamList } from './TopTabNavigator';
+import z from "zod";
+import { roomSchema } from '@oms-monorepo/shared';
 
 export type StackNavigatorParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabNavigatorParamList>;
   CreateRequest: undefined;
   ShowRequest: undefined;
   Rooms: undefined;
-  RoomAgenda: { room: Room };
-  RoomInfo: { room: Room };
+  RoomAgenda: { room: z.infer<typeof roomSchema> };
+  RoomInfo: { room: z.infer<typeof roomSchema> };
 };
 
 declare global {

@@ -1,65 +1,28 @@
-import { ScrollView, VStack } from "native-base";
-import Building from "../components/Building";
+import { apiRoomsResponseSchema } from '@oms-monorepo/shared';
+import { ScrollView, VStack } from 'native-base';
+import Building from '../components/Building';
+import z from 'zod';
+import { useState, useEffect } from 'react';
+import { getServerUrl } from '../settings';
 
 const RoomsScreen = () => {
-  const buildings = [
-    {
-      id: 1,
-      name: 'Grolier',
-      address: "Rue de la Paix, 69210 L'Arbresle",
-      rooms: [
-        {
-          id: 1,
-          name: 'Gymnase',
-          description: 'Salle multi-sport',
-          image: 'https://picsum.photos/200',
-          capacity: 100,
-        },
-        {
-          id: 2,
-          name: 'Dojo',
-          description: 'Art-martiaux',
-          image: 'https://picsum.photos/201',
-          capacity: 20,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Grand-champs',
-      address: 'Rue de la Paix, 69210 Sain-bel',
-      rooms: [
-        {
-          id: 3,
-          name: "Salle d'escalade",
-          description: 'Escalade uniquement',
-          image: 'https://picsum.photos/202',
-          capacity: 20,
-        },
-        {
-          id: 4,
-          name: 'Salle de réunion',
-          description: '10 tables, 20 chaises',
-          image: 'https://picsum.photos/203',
-          capacity: 20,
-        },
-        {
-          id: 5,
-          name: 'Gymnase multi-sports',
-          description: 'Hauteur de plafond: 13m',
-          image: 'https://picsum.photos/204',
-          capacity: 100,
-        },
-      ],
-    },
-  ];
+  const [buildings, setBuildings] = useState<
+    z.infer<typeof apiRoomsResponseSchema> | undefined
+  >(undefined);
+
+  useEffect(() => {
+    fetch(`${getServerUrl()}/rooms`)
+      .then((response) => response.json())
+      .then((data) => setBuildings(data));
+  });
 
   return (
     <ScrollView>
       <VStack safeAreaBottom minHeight="100%" padding={4} space={4}>
-        {buildings.map((building) => (
-          <Building building={building} key={building.id} />
-        ))}
+        {buildings !== undefined &&
+          buildings.map((building) => (
+            <Building building={building} key={building.id} />
+          ))}
       </VStack>
     </ScrollView>
   );
