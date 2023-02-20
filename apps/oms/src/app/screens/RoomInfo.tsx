@@ -1,40 +1,24 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { ArrowBackIcon, AspectRatio, Divider, Heading, HStack, IconButton, Image, InfoIcon, Spacer, Text, VStack } from "native-base";
-import { ImageBackground } from "react-native";
-import { StackNavigatorParamList } from "./StackNavigator";
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  Divider,
+  HStack,
+  Image,
+  InfoIcon,
+  Text,
+  VStack,
+} from 'native-base';
+import RoomHeader from '../components/RoomHeader';
+import { StackNavigatorParamList } from './StackNavigator';
 
-const RoomScreen = () => {
-  const route = useRoute<RouteProp<StackNavigatorParamList, 'Room'>>();
+const RoomInfoScreen = () => {
+  const route = useRoute<RouteProp<StackNavigatorParamList, 'RoomInfo'>>();
   const { room } = route.params;
 
   const navigation = useNavigation();
 
   return (
     <VStack minHeight="100%">
-      <AspectRatio ratio={16 / 9}>
-        <ImageBackground
-          source={{
-            uri: room.image,
-          }}
-          resizeMode="cover"
-        >
-          <VStack flexGrow="1">
-            <Spacer flexGrow="1" />
-            <HStack
-              space={4}
-              padding={4}
-              backgroundColor="rgba(255, 255, 255, 0.8)"
-              alignItems="center"
-            >
-              <IconButton
-                onPress={() => navigation.goBack()}
-                icon={<ArrowBackIcon color="black" size="md" />}
-              />
-              <Heading>{room.name} - Grolier</Heading>
-            </HStack>
-          </VStack>
-        </ImageBackground>
-      </AspectRatio>
+      <RoomHeader room={room} onBack={() => navigation.goBack()} />
       <VStack padding={4} space={4}>
         <VStack
           rounded="lg"
@@ -93,4 +77,4 @@ const RoomScreen = () => {
   );
 };
 
-export default RoomScreen;
+export default RoomInfoScreen;

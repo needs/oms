@@ -2,7 +2,8 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Room } from '../components/Building';
 import CreateRequestScreen from './CreateRequest';
-import RoomScreen from './Room';
+import RoomAgendaScreen from './RoomAgenda';
+import RoomInfoScreen from './RoomInfo';
 import RoomsScreen from './Rooms';
 import ShowRequestScreen from './ShowRequest';
 import TopTabNavigator, { TopTabNavigatorParamList } from './TopTabNavigator';
@@ -12,7 +13,8 @@ export type StackNavigatorParamList = {
   CreateRequest: undefined;
   ShowRequest: undefined;
   Rooms: undefined;
-  Room: { room: Room };
+  RoomAgenda: { room: Room };
+  RoomInfo: { room: Room };
 };
 
 declare global {
@@ -49,9 +51,14 @@ const StackNavigator = () => {
         options={{ title: 'Salles' }}
       />
       <Stack.Screen
-        name="Room"
-        component={RoomScreen}
-        options={{ title: 'Salle', headerShown: false }}
+        name="RoomAgenda"
+        component={RoomAgendaScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RoomInfo"
+        component={RoomInfoScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
