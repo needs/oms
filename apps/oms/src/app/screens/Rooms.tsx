@@ -13,6 +13,7 @@ const RoomsScreen = () => {
   useEffect(() => {
     fetch(`${getServerUrl()}/rooms`)
       .then((response) => response.json())
+      .then((data) => apiRoomsResponseSchema.parse(data))
       .then((data) => setBuildings(data));
   });
 
