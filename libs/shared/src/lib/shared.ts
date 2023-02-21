@@ -8,8 +8,25 @@ export const roomSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string(),
-  image: z.string().url(),
+  pictures: z.array(z.string().url()),
   capacity: z.number(),
+});
+
+export const collectiveSchema = z.object({
+  fullName: z.string(),
+  shortName: z.string(),
+  logo: z.string().url().optional(),
+});
+
+export const bookingSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  start: z.coerce.date(),
+  end: z.coerce.date(),
+  numberOfPeople: z.number(),
+  approved: z.boolean(),
+  room: roomSchema,
+  collective: collectiveSchema,
 });
 
 export const buildingSchema = z.object({
@@ -20,3 +37,4 @@ export const buildingSchema = z.object({
 });
 
 export const apiRoomsResponseSchema = z.array(buildingSchema);
+export const apiBookingsResponseSchema = z.array(bookingSchema);

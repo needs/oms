@@ -15,6 +15,7 @@ async function main() {
     data: {
       shortName: 'BCA',
       fullName: 'Basket Club de l’Arbresle',
+      logo: 'https://picsum.photos/200',
     },
   })
 
@@ -22,6 +23,7 @@ async function main() {
     data: {
       shortName: 'ABC',
       fullName: "L'Arbresle Badminton Club",
+      logo: 'https://picsum.photos/201',
     },
   })
 
@@ -130,7 +132,7 @@ async function main() {
   const bookings: Prisma.BookingCreateManyArgs["data"] = []
 
   for (const d = new Date(2023, 0, 1); d <= new Date(2023, 11, 31); d.setDate(d.getDate() + 1)) {
-    for (const room of grandChamps.rooms) {
+    for (const room of grandChamps.rooms.concat(grolier.rooms)) {
       for (let i = 0; i < randomInt(0, 3); i++) {
         const startingHourDate = new Date(d)
 
@@ -150,7 +152,7 @@ async function main() {
           end: endingHourDate,
 
           roomId: room.id,
-          collectiveId: bca.id,
+          collectiveId: randomInt(2) === 1 ? bca.id : abc.id,
         })
       }
     }

@@ -28,7 +28,7 @@ const Building = ({ building }: { building: z.infer<typeof buildingSchema> }) =>
             onPress={() => navigation.navigate('RoomAgenda', { room })}
           >
             <HStack space={4} alignItems="center">
-              <Image source={{ uri: room.image }} alt="Room" size="sm" />
+              <Image source={{ uri: room.pictures[0] ?? 'https://picsum.photos/201' }} alt="Room" size="sm" />
               <VStack justifyContent="center" flexGrow="1">
                 <Text>{room.name}</Text>
                 <Text color="coolGray.400">{room.capacity} personnes</Text>

@@ -2,7 +2,7 @@ import { Avatar, HStack, Pressable, Text, VStack } from "native-base";
 
 interface Request {
   club: string;
-  logo: string;
+  logo?: string;
   startDate: Date;
   endDate: Date;
   room: string;
@@ -31,7 +31,7 @@ const Request = ({
   return (
     <Pressable onPress={onPress}>
       <HStack bg="white" py="2" px="4" space="4" rounded="lg">
-        <Avatar source={{ uri: request.logo }} />
+        <Avatar source={{ uri: request.logo ?? "https://picsum.photos/200" }} />
         <VStack flexGrow="1">
           <HStack flexGrow="1">
             <Text flexGrow="1">{request.club}</Text>

@@ -16,7 +16,7 @@ const RoomHeader = ({ room, onBack }: { room: z.infer<typeof roomSchema>; onBack
     <AspectRatio ratio={16 / 9}>
       <ImageBackground
         source={{
-          uri: room.image,
+          uri: room.pictures[0] ?? 'https://picsum.photos/201',
         }}
         resizeMode="cover"
       >
