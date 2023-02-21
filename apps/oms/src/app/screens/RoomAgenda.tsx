@@ -12,7 +12,7 @@ const RoomAgendaScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <VStack minHeight="100%">
+    <VStack minHeight="100%" safeAreaBottom>
       <RoomHeader room={room} onBack={() => navigation.goBack()} />
       <Box w="100%" flexGrow={1}>
         <Agenda

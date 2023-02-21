@@ -17,7 +17,7 @@ const RoomInfoScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <VStack minHeight="100%">
+    <VStack minHeight="100%" safeAreaBottom>
       <RoomHeader room={room} onBack={() => navigation.goBack()} />
       <VStack padding={4} space={4}>
         <VStack
