@@ -19,7 +19,6 @@ const RoomAgendaScreen = () => {
   const navigation = useNavigation();
 
   const [requests, setRequests] = useState<undefined | Requests>(undefined);
-  console.log(room.id)
 
   useEffect(() => {
     fetch(
