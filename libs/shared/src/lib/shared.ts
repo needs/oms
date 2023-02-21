@@ -38,3 +38,4 @@ export const buildingSchema = z.object({
 
 export const apiRoomsResponseSchema = z.array(buildingSchema);
 export const apiBookingsResponseSchema = z.array(bookingSchema);
+export const apiBookingsLightResponseSchema = z.record(z.string(), z.number());

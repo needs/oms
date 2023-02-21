@@ -6,7 +6,7 @@ import RoomInfoScreen from './RoomInfo';
 import ShowRequestScreen from './ShowRequest';
 import TopTabNavigator, { TopTabNavigatorParamList } from './TopTabNavigator';
 import z from "zod";
-import { bookingSchema, roomSchema } from '@oms-monorepo/shared';
+import { roomSchema } from '@oms-monorepo/shared';
 import RoomAgendaEntryScreen from './RoomAgendaEntry';
 
 export type StackNavigatorParamList = {
@@ -15,7 +15,7 @@ export type StackNavigatorParamList = {
   ShowRequest: undefined;
   Rooms: undefined;
   RoomAgenda: { room: z.infer<typeof roomSchema> };
-  RoomAgendaEntry: { room: z.infer<typeof roomSchema>, bookings: z.infer<typeof bookingSchema>[] };
+  RoomAgendaEntry: { room: z.infer<typeof roomSchema>, day: string };
   RoomInfo: { room: z.infer<typeof roomSchema> };
 };
 
