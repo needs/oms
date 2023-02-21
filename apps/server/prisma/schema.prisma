@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -18,63 +18,87 @@ model Room {
   bookings      Booking[]
   organizations OrganizationToRoom[]
 
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Building {
-  id        Int      @id @default(autoincrement())
-  name      String
-  address   String
-  pictures  String[]
-  rooms     Room[]
+  id       Int      @id @default(autoincrement())
+  name     String
+  address  String
+  pictures String[]
+  rooms    Room[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Booking {
-  id             Int          @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   title          String
   start          DateTime
+  end            DateTime
   numberOfPeople Int
   description    String?
-  end            DateTime
-  booked         Boolean      @default(false)
-  room           Room         @relation(fields: [roomId], references: [id])
+  approved       Boolean    @default(false)
+  room           Room       @relation(fields: [roomId], references: [id])
   roomId         Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int
+  collective     Collective @relation(fields: [collectiveId], references: [id])
+  collectiveId   Int
   votes          Vote[]
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vote {
-  id        Int      @id @default(autoincrement())
-  approved  Boolean
-  booking   Booking  @relation(fields: [bookingId], references: [id])
-  bookingId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int
+  id           Int        @id @default(autoincrement())
+  approving    Boolean
+  booking      Booking    @relation(fields: [bookingId], references: [id])
+  bookingId    Int
+  collective   Collective @relation(fields: [collectiveId], references: [id])
+  collectiveId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Organization {
-  id        Int                  @id @default(autoincrement())
-  fullName  String
-  shortName String
-  logo      String?
-  members   OrganizationToUser[]
-  bookings  Booking[]
-  rooms     OrganizationToRoom[]
-  votes    Vote[]
+  id          Int                        @id @default(autoincrement())
+  fullName    String
+  shortName   String
+  logo        String?
+  collectives OrganizationToCollective[]
+  rooms       OrganizationToRoom[]
 
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Collective {
+  id            Int                        @id @default(autoincrement())
+  fullName      String
+  shortName     String
+  logo          String?
+  members       CollectiveToUser[]
+  bookings      Booking[]
+  votes         Vote[]
+  organizations OrganizationToCollective[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CollectiveToUser {
+  collectiveId Int
+  userId       Int
+  collective   Collective @relation(fields: [collectiveId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
+  canBook Boolean @default(false)
+  canEdit Boolean @default(false)
+
+  @@id([collectiveId, userId])
 }
 
 model OrganizationToRoom {
@@ -89,26 +113,27 @@ model OrganizationToRoom {
   @@id([organizationId, roomId])
 }
 
-model OrganizationToUser {
+model OrganizationToCollective {
   organizationId Int
-  userId         Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  user           User         @relation(fields: [userId], references: [id])
+  collectiveId   Int
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  collective   Collective   @relation(fields: [collectiveId], references: [id])
 
   canBook Boolean @default(false)
   canEdit Boolean @default(false)
 
-  @@id([organizationId, userId])
+  @@id([organizationId, collectiveId])
 }
 
 model User {
-  id            Int                  @id @default(autoincrement())
-  email         String               @unique
-  password      String
-  firstName     String
-  lastName      String
-  organizations OrganizationToUser[]
+  id          Int                @id @default(autoincrement())
+  email       String             @unique
+  password    String
+  firstName   String
+  lastName    String
+  collectives CollectiveToUser[]
 
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
