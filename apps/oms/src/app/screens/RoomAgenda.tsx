@@ -1,17 +1,16 @@
-import { apiBookingsResponseSchema } from '@oms-monorepo/shared';
+import { apiBookingsResponseSchema, bookingSchema } from '@oms-monorepo/shared';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Box, Button, VStack } from 'native-base';
+import { Box, VStack } from 'native-base';
 import { useState, useEffect } from 'react';
-import { Agenda, AgendaSchedule } from 'react-native-calendars';
-import Request from '../components/Request';
+import { CalendarList } from 'react-native-calendars';
+import { MarkedDates } from 'react-native-calendars/src/types';
 import RoomHeader from '../components/RoomHeader';
 import { getServerUrl } from '../settings';
 import { StackNavigatorParamList } from './StackNavigator';
+import z from 'zod';
 
-type AgendaEntry = Request | 'add button';
-
-type AgendaEntries = {
-  [key: string]: AgendaEntry[];
+type BookingsBydate = {
+  [key: string]: z.infer<typeof bookingSchema>[];
 };
 
 const RoomAgendaScreen = () => {
@@ -20,9 +19,12 @@ const RoomAgendaScreen = () => {
 
   const navigation = useNavigation();
 
-  const [agendaEntries, setAgendaEntries] = useState<undefined | AgendaEntries>(
+  const [markedDates, setMarkedDates] = useState<undefined | MarkedDates>(
     undefined
   );
+  const [bookingsByDate, setBookingsByDate] = useState<
+    undefined | BookingsBydate
+  >(undefined);
 
   useEffect(() => {
     fetch(
@@ -33,88 +35,49 @@ const RoomAgendaScreen = () => {
       .then((response) => response.json())
       .then((data) => apiBookingsResponseSchema.parse(data))
       .then((data) => {
-        const agendaEntries: AgendaEntries = {};
+        const markedDatesNew: MarkedDates = {};
+        const bookingsByDatesNew: BookingsBydate = {};
 
         data.forEach((booking) => {
           const date = booking.start.toISOString().split('T')[0];
 
-          if (agendaEntries[date] === undefined) {
-            agendaEntries[date] = [];
+          if (markedDatesNew[date] === undefined) {
+            markedDatesNew[date] = {
+              marked: true,
+            };
           }
 
-          agendaEntries[date].push({
-            club: booking.collective.shortName,
-            logo: booking.collective.logo,
-            startDate: booking.start,
-            endDate: booking.end,
-            room: booking.room.name,
-            status: booking.approved ? 'approved' : 'pending',
-          });
+          if (bookingsByDatesNew[date] === undefined) {
+            bookingsByDatesNew[date] = [];
+          }
+
+          bookingsByDatesNew[date].push(booking);
         });
 
-        for (const date in agendaEntries) {
-          agendaEntries[date].push('add button');
-        }
-
-        setAgendaEntries(agendaEntries);
+        setMarkedDates(markedDatesNew);
+        setBookingsByDate(bookingsByDatesNew);
       });
-  });
+  }, [room.id]);
 
   return (
     <VStack minHeight="100%" safeAreaBottom>
       <RoomHeader room={room} onBack={() => navigation.goBack()} />
       <Box w="100%" flexGrow={1}>
-        <Agenda
-          items={agendaEntries as unknown as AgendaSchedule}
+        <CalendarList
+          markedDates={markedDates}
           firstDay={1}
-          refreshing={agendaEntries === undefined}
-          renderItem={(item, firstItemInDay) => {
-            const agendaEntry = item as unknown as AgendaEntry;
-            if (agendaEntry === 'add button') {
-              return (
-                <Button
-                  onPress={() => navigation.navigate('CreateRequest')}
-                  variant="outline"
-                  size="sm"
-                  alignSelf="center"
-                  width="100%"
-                >
-                  Demander un créneau
-                </Button>
-              );
-            } else {
-              return (
-                <Box marginBottom={firstItemInDay ? 0 : 2}>
-                  <Request
-                    request={agendaEntry}
-                    onPress={() => navigation.navigate('ShowRequest')}
-                  />
-                </Box>
-              );
+          onDayPress={(day) => {
+            console.log('Pressed');
+
+            if (bookingsByDate !== undefined) {
+              const bookings = bookingsByDate[day.dateString] ?? [];
+
+              navigation.navigate('RoomAgendaEntry', {
+                room,
+                bookings: bookings,
+              });
             }
           }}
-          renderEmptyData={() => (
-            <Button
-              onPress={() => navigation.navigate('CreateRequest')}
-              variant="outline"
-              size="sm"
-              alignSelf="center"
-              width="100%"
-            >
-              Demander un créneau
-            </Button>
-          )}
-          renderEmptyDate={() => (
-            <Button
-              onPress={() => navigation.navigate('CreateRequest')}
-              variant="outline"
-              size="sm"
-              alignSelf="center"
-              width="100%"
-            >
-              Demander un créneau
-            </Button>
-          )}
         />
       </Box>
     </VStack>

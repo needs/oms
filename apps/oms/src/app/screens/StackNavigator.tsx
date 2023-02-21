@@ -3,11 +3,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateRequestScreen from './CreateRequest';
 import RoomAgendaScreen from './RoomAgenda';
 import RoomInfoScreen from './RoomInfo';
-import RoomsScreen from './Rooms';
 import ShowRequestScreen from './ShowRequest';
 import TopTabNavigator, { TopTabNavigatorParamList } from './TopTabNavigator';
 import z from "zod";
-import { roomSchema } from '@oms-monorepo/shared';
+import { bookingSchema, roomSchema } from '@oms-monorepo/shared';
+import RoomAgendaEntryScreen from './RoomAgendaEntry';
 
 export type StackNavigatorParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabNavigatorParamList>;
@@ -15,6 +15,7 @@ export type StackNavigatorParamList = {
   ShowRequest: undefined;
   Rooms: undefined;
   RoomAgenda: { room: z.infer<typeof roomSchema> };
+  RoomAgendaEntry: { room: z.infer<typeof roomSchema>, bookings: z.infer<typeof bookingSchema>[] };
   RoomInfo: { room: z.infer<typeof roomSchema> };
 };
 
@@ -49,6 +50,11 @@ const StackNavigator = () => {
       <Stack.Screen
         name="RoomAgenda"
         component={RoomAgendaScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RoomAgendaEntry"
+        component={RoomAgendaEntryScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
