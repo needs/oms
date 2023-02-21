@@ -2,11 +2,11 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ProfilScreen from "./Profil";
 import RequestsScreen from "./Requests";
-import TimelineScreen from "./Timeline";
+import RoomsScreen from "./Rooms";
 import VotesScreen from "./Votes";
 
 export type TopTabNavigatorParamList = {
-  Timeline: undefined;
+  Rooms: undefined;
   Requests: undefined;
   Votes: undefined;
   Club: undefined;
@@ -22,13 +22,13 @@ const TopTabNavigator = () => {
 
   return (
     <TopTab.Navigator
-      initialRouteName="Timeline"
+      initialRouteName="Rooms"
       screenOptions={{ tabBarStyle: { paddingTop: insets.top } }}
     >
       <TopTab.Screen
-        name="Timeline"
-        component={TimelineScreen}
-        options={{ title: 'Agenda' }}
+        name="Rooms"
+        component={RoomsScreen}
+        options={{ title: 'Salles' }}
       />
       <TopTab.Screen
         name="Requests"

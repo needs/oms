@@ -47,11 +47,6 @@ const StackNavigator = () => {
         options={{ title: 'Demande de créneau', presentation: 'modal' }}
       />
       <Stack.Screen
-        name="Rooms"
-        component={RoomsScreen}
-        options={{ title: 'Salles' }}
-      />
-      <Stack.Screen
         name="RoomAgenda"
         component={RoomAgendaScreen}
         options={{ headerShown: false }}
