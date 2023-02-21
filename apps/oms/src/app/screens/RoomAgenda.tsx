@@ -104,6 +104,17 @@ const RoomAgendaScreen = () => {
               Demander un créneau
             </Button>
           )}
+          renderEmptyDate={() => (
+            <Button
+              onPress={() => navigation.navigate('CreateRequest')}
+              variant="outline"
+              size="sm"
+              alignSelf="center"
+              width="100%"
+            >
+              Demander un créneau
+            </Button>
+          )}
         />
       </Box>
     </VStack>
