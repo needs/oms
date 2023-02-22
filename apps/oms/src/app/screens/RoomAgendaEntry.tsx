@@ -3,6 +3,7 @@ import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { Box, Button, VStack } from 'native-base';
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
+import BookingsList from '../components/BookingsList';
 import Request from '../components/Request';
 import RoomHeader from '../components/RoomHeader';
 import { getServerUrl } from '../settings';
@@ -36,23 +37,9 @@ const RoomAgendaEntryScreen = () => {
   return (
     <VStack minHeight="100%" safeAreaBottom>
       <RoomHeader room={room} onBack={() => navigation.goBack()} />
-      <VStack w="100%" flexGrow={1} padding={2} space={2}>
-        {bookings !== undefined &&
-          bookings.map((booking, index) => (
-            <Request
-              key={index}
-              request={{
-                club: booking.collective.shortName,
-                startDate: booking.start,
-                endDate: booking.end,
-                logo: booking.collective.logo,
-                room: booking.room.name,
-                status: booking.approved ? 'approved' : 'pending',
-              }}
-              onPress={() => navigation.navigate('ShowRequest')}
-            />
-          ))}
-      </VStack>
+      <Box flexGrow={1}>
+        {bookings !== undefined && <BookingsList bookings={bookings} />}
+      </Box>
       <Box padding={2}>
         <Button
           onPress={() => navigation.navigate('CreateRequest')}
