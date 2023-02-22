@@ -4,7 +4,6 @@ import { Box, Button, VStack } from 'native-base';
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
 import BookingsList from '../components/BookingsList';
-import Request from '../components/Request';
 import RoomHeader from '../components/RoomHeader';
 import { getServerUrl } from '../settings';
 import { StackNavigatorParamList } from './StackNavigator';

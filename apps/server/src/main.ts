@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { apiBookingsLightResponseSchema, apiBookingsResponseSchema, apiRequestsResponseSchema, apiRoomsResponseSchema, schema } from '@oms-monorepo/shared';
+import { apiBookingsLightResponseSchema, apiBookingsResponseSchema, apiBookingsToBeVotedResponseSchema, apiRequestsResponseSchema, apiRoomsResponseSchema, schema } from '@oms-monorepo/shared';
 import express from 'express';
 import * as path from 'path';
 import { z } from "zod";
@@ -100,9 +100,29 @@ app.get('/requests', async (req, res) => {
     take: 10,
   });
 
-  console.log(bookings);
-
   const result: z.infer<typeof apiRequestsResponseSchema> = bookings;
+
+  res.send(result);
+});
+
+app.get('/bookingsToBeVoted', async (req, res) => {
+  const bookings = await prisma.booking.findMany({
+    where: {
+      approved: false,
+    },
+    include: {
+      collective: true,
+      room: {
+        include: {
+          building: true,
+        },
+      }
+    },
+    skip: 10,
+    take: 10,
+  });
+
+  const result: z.infer<typeof apiBookingsToBeVotedResponseSchema> = bookings;
 
   res.send(result);
 });

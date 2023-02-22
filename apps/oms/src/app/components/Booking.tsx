@@ -1,45 +1,40 @@
+import { bookingFullSchema } from "@oms-monorepo/shared";
 import { Avatar, HStack, Pressable, Text, VStack } from "native-base";
+import z from "zod";
 
-interface Request {
-  club: string;
-  logo?: string;
-  startDate: Date;
-  endDate: Date;
-  room: string;
-  status: 'approved' | 'pending' | 'refused';
-}
-
-const Request = ({
-  request,
+const Booking = ({
+  booking,
   onPress,
 }: {
-  request: Request;
+  booking: z.infer<typeof bookingFullSchema>;
   onPress: () => void;
 }) => {
+  const bookingStatus = booking.approved ? "approved" : "pending";
+
   const statusColor = {
     approved: 'green.300',
     pending: 'yellow.300',
     refused: 'red.300',
-  }[request.status];
+  }[bookingStatus];
 
   const statusText = {
     approved: 'Approuvé',
     pending: 'En attente',
     refused: 'Refusé',
-  }[request.status];
+  }[bookingStatus];
 
   return (
     <Pressable onPress={onPress}>
-      <HStack bg="white" py="2" px="4" space="4" rounded="lg">
-        <Avatar source={{ uri: request.logo ?? "https://picsum.photos/200" }} />
+      <HStack bg="white" py="2" px="4" space="4">
+        <Avatar source={{ uri: booking.collective.logo ?? "https://picsum.photos/200" }} />
         <VStack flexGrow="1">
           <HStack flexGrow="1">
-            <Text flexGrow="1">{request.club}</Text>
+            <Text flexGrow="1">{booking.collective.shortName}</Text>
             <Text color={statusColor}>{statusText}</Text>
           </HStack>
           <HStack flexGrow="1">
             <Text color="coolGray.500" flexGrow="1">
-              {request.room}
+              {booking.description}
             </Text>
             <Text color="coolGray.500">18h - 20h</Text>
           </HStack>
@@ -49,4 +44,4 @@ const Request = ({
   );
 };
 
-export default Request;
+export default Booking;

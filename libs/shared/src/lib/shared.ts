@@ -50,3 +50,4 @@ export const apiRoomsResponseSchema = z.array(buildingFullSchema);
 export const apiBookingsResponseSchema = z.array(bookingFullSchema);
 export const apiBookingsLightResponseSchema = z.record(z.string(), z.number());
 export const apiRequestsResponseSchema = z.array(bookingFullSchema);
+export const apiBookingsToBeVotedResponseSchema = z.array(bookingFullSchema);

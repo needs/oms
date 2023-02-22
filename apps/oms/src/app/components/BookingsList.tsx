@@ -1,9 +1,9 @@
 import { apiBookingsResponseSchema } from '@oms-monorepo/shared';
 import { useNavigation } from '@react-navigation/native';
-import { Box, Divider, Heading, Text, VStack } from 'native-base';
+import { Box, Divider, Text, VStack } from 'native-base';
 import { useMemo } from 'react';
 import { z } from 'zod';
-import Request from '../components/Request';
+import Booking from './Booking';
 
 const BookingsList = ({
   bookings,
@@ -52,16 +52,9 @@ const BookingsList = ({
             </Text>
           </Box>
           {bookings.map((booking, index) => (
-            <Request
+            <Booking
               key={index}
-              request={{
-                club: booking.collective.shortName,
-                startDate: booking.start,
-                endDate: booking.end,
-                logo: booking.collective.logo,
-                room: booking.room.name,
-                status: booking.approved ? 'approved' : 'pending',
-              }}
+              booking={booking}
               onPress={() => navigation.navigate('ShowRequest')}
             />
           ))}

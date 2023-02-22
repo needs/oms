@@ -7,7 +7,7 @@ export const getServerUrl = () => {
 
   if (url === undefined) {
     const debuggerHost = manifest?.debuggerHost;
-    if (debuggerHost !== null) {
+    if (debuggerHost !== undefined) {
       return `http://${debuggerHost.split(':').shift()}:3333`;
     } else {
       throw new Error('SERVER_URL is not defined');
