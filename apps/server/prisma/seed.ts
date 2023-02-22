@@ -145,7 +145,7 @@ async function main() {
 
         bookings.push({
           title: 'Réservation de la salle',
-          approved: true,
+          approved: randomInt(3) === 1,
           numberOfPeople: randomInt(1, 20),
           description: 'Réservation générique de test',
           start: startingHourDate,

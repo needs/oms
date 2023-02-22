@@ -1,9 +1,9 @@
-import { buildingSchema } from "@oms-monorepo/shared";
+import { buildingFullSchema } from "@oms-monorepo/shared";
 import { useNavigation } from "@react-navigation/native";
 import { Box, ChevronRightIcon, Divider, HStack, Image, Pressable, Text, VStack } from "native-base";
 import { z } from "zod";
 
-const Building = ({ building }: { building: z.infer<typeof buildingSchema> }) => {
+const Building = ({ building }: { building: z.infer<typeof buildingFullSchema> }) => {
   const navigation = useNavigation();
 
   return (

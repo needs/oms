@@ -12,6 +12,16 @@ export const roomSchema = z.object({
   capacity: z.number(),
 });
 
+export const buildingSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  address: z.string(),
+});
+
+export const roomFullSchema = roomSchema.merge(z.object({
+  building: buildingSchema,
+}));
+
 export const collectiveSchema = z.object({
   fullName: z.string(),
   shortName: z.string(),
@@ -25,17 +35,18 @@ export const bookingSchema = z.object({
   end: z.coerce.date(),
   numberOfPeople: z.number(),
   approved: z.boolean(),
-  room: roomSchema,
+});
+
+export const bookingFullSchema = bookingSchema.merge(z.object({
+  room: roomFullSchema,
   collective: collectiveSchema,
-});
+}));
 
-export const buildingSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  address: z.string(),
+export const buildingFullSchema = buildingSchema.merge(z.object({
   rooms: z.array(roomSchema),
-});
+}));
 
-export const apiRoomsResponseSchema = z.array(buildingSchema);
-export const apiBookingsResponseSchema = z.array(bookingSchema);
+export const apiRoomsResponseSchema = z.array(buildingFullSchema);
+export const apiBookingsResponseSchema = z.array(bookingFullSchema);
 export const apiBookingsLightResponseSchema = z.record(z.string(), z.number());
+export const apiRequestsResponseSchema = z.array(bookingFullSchema);

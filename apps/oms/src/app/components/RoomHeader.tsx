@@ -9,6 +9,7 @@ import {
   InfoIcon,
   Spacer,
   VStack,
+  Image
 } from 'native-base';
 import { ImageBackground } from 'react-native';
 import z from 'zod';
@@ -56,6 +57,26 @@ const RoomHeader = ({
         </VStack>
       </ImageBackground>
     </AspectRatio>
+  );
+};
+
+export const RoomHeaderInline = ({ room }: { room: z.infer<typeof roomSchema> }) => {
+  return (
+    <VStack flexGrow="1">
+      <HStack
+        space={4}
+        backgroundColor="white"
+        alignItems="center"
+      >
+        <Image source={{ uri: room.pictures[0] ?? 'https://picsum.photos/201' }} alt="Room" size="sm" />
+        <VStack alignItems="flex-start" flexGrow="1">
+          <Heading size="sm">{room.name}</Heading>
+          <Heading size="xs" color="gray.500">
+            Groslier
+          </Heading>
+        </VStack>
+      </HStack>
+    </VStack>
   );
 };
 
