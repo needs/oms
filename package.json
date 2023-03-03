@@ -54,6 +54,7 @@
     "@nrwl/web": "15.6.3",
     "@nrwl/webpack": "15.6.3",
     "@nrwl/workspace": "15.6.3",
+    "@nx-extend/strapi": "^3.4.0",
     "@nx-tools/nx-prisma": "^4.0.3",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-native-community/cli": "10.1.3",
